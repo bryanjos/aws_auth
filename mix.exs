@@ -20,7 +20,7 @@ defmodule AWSAuth.Mixfile do
 
   defp description do
     """
-    AWS Auth library for AWS Signature Version 4
+    AWS Signature Version 4 Signing Library
     """
   end
 
