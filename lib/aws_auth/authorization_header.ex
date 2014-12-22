@@ -23,7 +23,7 @@ defmodule AWSAuth.AuthorizationHeader do
       headers = Dict.put(headers, "host", uri.host)
     end
 
-    hashed_payload =  AWSAuth.Utils.hash_payload(payload)
+    hashed_payload =  AWSAuth.Utils.hash_sha256(payload)
 
     if !Dict.has_key?(headers, "x-amz-content-sha256") do
       headers = Dict.put(headers, "x-amz-content-sha256", hashed_payload)

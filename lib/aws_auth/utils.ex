@@ -24,15 +24,9 @@ defmodule AWSAuth.Utils do
   end
 
   def build_string_to_sign(canonical_request, timestamp, scope) do    
-    hashed_canonical_request = :crypto.hash(:sha256, canonical_request) 
-    |> bytes_to_string
+    hashed_canonical_request = hash_sha256(canonical_request)
     
     "AWS4-HMAC-SHA256\n#{timestamp}\n#{scope}\n#{hashed_canonical_request}"
-  end
-
-  def hash_payload(payload) do
-    :crypto.hash(:sha256, payload) 
-    |> bytes_to_string
   end
 
   def build_signing_key(secret_key, date, region, service) do
@@ -44,6 +38,11 @@ defmodule AWSAuth.Utils do
 
   def build_signature(signing_key, string_to_sign) do
     hmac_sha256(signing_key, string_to_sign)
+    |> bytes_to_string
+  end
+
+  def hash_sha256(data) do
+    :crypto.hash(:sha256, data) 
     |> bytes_to_string
   end
 
