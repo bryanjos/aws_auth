@@ -34,7 +34,7 @@ defmodule AWSAuth.AuthorizationHeader do
 
     scope = "#{date}/#{region}/#{service}/aws4_request"
 
-    string_to_sign =  AWSAuth.Utils.build_canonical_request(http_method, uri.path, params, headers, hashed_payload)
+    string_to_sign =  AWSAuth.Utils.build_canonical_request(http_method, uri.path || "/", params, headers, hashed_payload)
     |>  AWSAuth.Utils.build_string_to_sign(amz_date, scope)
 
     signature =  AWSAuth.Utils.build_signing_key(secret_key, date, region, service) 
