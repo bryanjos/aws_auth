@@ -12,7 +12,16 @@ defmodule AWSAuth.AuthorizationHeader do
       _ ->
         String.split(uri.query, "&")
         |> Enum.map(fn(x) -> String.split(x, "=") end)
-        |> Enum.reduce(HashDict.new, fn(x, acc) -> Dict.put(acc, hd(x),  AWSAuth.Utils.uri_encode(hd(tl(x)))) end)
+        |> Enum.reduce(HashDict.new, fn(x, acc) ->
+            {key, value} = case length(x) do
+              1 ->
+                {hd(x), ""}
+              _ ->
+                {hd(x), List.last(x)}
+            end
+
+            Dict.put(acc, key,  AWSAuth.Utils.uri_encode(value)) 
+        end)
     end
 
     http_method = String.upcase(http_method)
