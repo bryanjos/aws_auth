@@ -56,6 +56,7 @@ defmodule AWSAuth.Utils do
     |> String.replace("+", "%2B")
     |> String.replace("=", "%3D")
     |> String.replace("$", "%24")
+    |> String.replace(";", "%3B")
   end
 
   def bytes_to_string(bytes) do

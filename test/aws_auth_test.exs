@@ -47,4 +47,19 @@ defmodule AWSAuthTest do
 
     assert signed_request == "AWS4-HMAC-SHA256 Credential=AKIAIOSFODNN7EXAMPLE/20130524/us-east-1/s3/aws4_request,SignedHeaders=date;host;x-amz-content-sha256;x-amz-date;x-amz-storage-class,Signature=98ad721746da40c64f1a55b78f14c238d841ea1380cd77a1b5971af0ece108bd"
   end
+
+  test "sign_query_parameters_request_with_multiple_headers" do
+    headers = HashDict.new
+    |> Dict.put("x-amz-acl", "public-read")
+    
+    signed_request = AWSAuth.sign_url("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+      "PUT", 
+      "https://examplebucket.s3.amazonaws.com/test.txt", 
+      "us-east-1", 
+      "s3",
+      headers,
+      Timex.Date.from({2013,05,24}, Timex.Date.timezone("GMT")))
+
+    assert signed_request == "https://examplebucket.s3.amazonaws.com/test.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20130524%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20130524T000000Z&X-Amz-Expires=86400&X-Amz-Signature=f5e83a5df8c5fc898824b8c2e0def42b6ef5f6af114e86f4f2282672ff83152&X-Amz-SignedHeaders=host%3Bx-amz-acl"
+  end
 end
