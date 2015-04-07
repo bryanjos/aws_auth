@@ -38,7 +38,7 @@ defmodule AWSAuth.QueryParameters do
     string_to_sign = AWSAuth.Utils.build_canonical_request(http_method, uri.path, params, headers, :unsigned)
     |> AWSAuth.Utils.build_string_to_sign(amz_date, scope)
 
-    signature = AWSAuth.Utils.build_signing_key(secret_key, date, region, service) 
+    signature = AWSAuth.Utils.build_signing_key(secret_key, date, region, service)
     |> AWSAuth.Utils.build_signature(string_to_sign)
 
     params = Dict.put(params, "X-Amz-Signature", signature)
