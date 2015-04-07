@@ -16,18 +16,18 @@ defmodule AWSAuth do
 
   `service`: The AWS service you are trying to access (i.e. s3). Check the url above for names as well.
 
-  `headers` (optional. defaults to `HashDict.new`): The headers that will be used in the request. Used for signing the request. 
-  For signing, host is the only one required unless using any other x-amx-* headers. 
-  If host is present here, it will override using the host in the url to attempt signing. 
-  If only the host is needed, then you don't have to supply it and the host from the url will be used. 
-   """ 
+  `headers` (optional. defaults to `HashDict.new`): The headers that will be used in the request. Used for signing the request.
+  For signing, host is the only one required unless using any other x-amx-* headers.
+  If host is present here, it will override using the host in the url to attempt signing.
+  If only the host is needed, then you don't have to supply it and the host from the url will be used.
+   """
   def sign_url(access_key, secret_key, http_method, url, region, service) do
     sign_url(access_key, secret_key, http_method, url, region, service, HashDict.new)
-  end  
+  end
 
   def sign_url(access_key, secret_key, http_method, url, region, service, headers) do
     sign_url(access_key, secret_key, http_method, url, region, service, headers, Date.now)
-  end 
+  end
 
   def sign_url(access_key, secret_key, http_method, url, region, service, headers, request_time) do
     AWSAuth.QueryParameters.sign(access_key, secret_key, http_method, url, region, service, headers, request_time)
@@ -49,22 +49,22 @@ defmodule AWSAuth do
 
   `service`: The AWS service you are trying to access (i.e. s3). Check the url above for names as well.
 
-  `headers` (optional. defaults to `HashDict.new`): The headers that will be used in the request. Used for signing the request. 
-  For signing, host is the only one required unless using any other x-amx-* headers. 
+  `headers` (optional. defaults to `HashDict.new`): The headers that will be used in the request. Used for signing the request.
+  For signing, host is the only one required unless using any other x-amx-* headers.
   If host is present here, it will override using the host in the url to attempt signing.
-  Same goes for the x-amz-content-sha256 headers 
-  If only the host and x-amz-content-sha256 headers are needed, then you don't have to supply it and the host from the url will be used and 
+  Same goes for the x-amz-content-sha256 headers
+  If only the host and x-amz-content-sha256 headers are needed, then you don't have to supply it and the host from the url will be used and
   the payload will be hashed to get the x-amz-content-sha256 header.
 
-  `payload` (optional. defaults to `""`): The contents of the payload if there is one. 
+  `payload` (optional. defaults to `""`): The contents of the payload if there is one.
   """
   def sign_authorization_header(access_key, secret_key, http_method, url, region, service) do
     sign_authorization_header(access_key, secret_key, http_method, url, region, service, HashDict.new)
-  end  
+  end
 
   def sign_authorization_header(access_key, secret_key, http_method, url, region, service, headers) do
     sign_authorization_header(access_key, secret_key, http_method, url, region, service, headers, "")
-  end 
+  end
 
   def sign_authorization_header(access_key, secret_key, http_method, url, region, service, headers, payload) do
     sign_authorization_header(access_key, secret_key, http_method, url, region, service, headers, payload, Date.now)

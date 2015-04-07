@@ -20,7 +20,7 @@ defmodule AWSAuth.AuthorizationHeader do
                 {hd(x), List.last(x)}
             end
 
-            Dict.put(acc, key,  AWSAuth.Utils.uri_encode(value)) 
+            Dict.put(acc, key,  AWSAuth.Utils.uri_encode(value))
         end)
     end
 
@@ -46,11 +46,11 @@ defmodule AWSAuth.AuthorizationHeader do
     string_to_sign =  AWSAuth.Utils.build_canonical_request(http_method, uri.path || "/", params, headers, hashed_payload)
     |>  AWSAuth.Utils.build_string_to_sign(amz_date, scope)
 
-    signature =  AWSAuth.Utils.build_signing_key(secret_key, date, region, service) 
+    signature =  AWSAuth.Utils.build_signing_key(secret_key, date, region, service)
     |>  AWSAuth.Utils.build_signature(string_to_sign)
 
-    signed_headers = Enum.map(headers, fn({key, _}) -> String.downcase(key)  end) 
-    |> Enum.sort(&(&1 < &2)) 
+    signed_headers = Enum.map(headers, fn({key, _}) -> String.downcase(key)  end)
+    |> Enum.sort(&(&1 < &2))
     |> Enum.join(";")
 
     "AWS4-HMAC-SHA256 Credential=#{access_key}/#{scope},SignedHeaders=#{signed_headers},Signature=#{signature}"
