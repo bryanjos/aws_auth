@@ -3,9 +3,9 @@ defmodule AWSAuthTest do
 
   test "url signing" do
     signed_request = AWSAuth.sign_url("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-      "GET", 
-      "https://examplebucket.s3.amazonaws.com/test.txt", 
-      "us-east-1", 
+      "GET",
+      "https://examplebucket.s3.amazonaws.com/test.txt",
+      "us-east-1",
       "s3",
       HashDict.new,
       Timex.Date.from({2013,05,24}, Timex.Date.timezone("GMT")))
@@ -19,9 +19,9 @@ defmodule AWSAuthTest do
     |> Dict.put("x-amz-date", "20130524T000000Z")
 
     signed_request = AWSAuth.sign_authorization_header("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-      "GET", 
-      "https://examplebucket.s3.amazonaws.com/test.txt", 
-      "us-east-1", 
+      "GET",
+      "https://examplebucket.s3.amazonaws.com/test.txt",
+      "us-east-1",
       "s3",
       headers,
       "",
@@ -37,9 +37,9 @@ defmodule AWSAuthTest do
     |> Dict.put("x-amz-date", "20130524T000000Z")
 
     signed_request = AWSAuth.sign_authorization_header("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-      "PUT", 
-      "https://examplebucket.s3.amazonaws.com/test$file.text", 
-      "us-east-1", 
+      "PUT",
+      "https://examplebucket.s3.amazonaws.com/test$file.text",
+      "us-east-1",
       "s3",
       headers,
       "Welcome to Amazon S3.",
@@ -51,11 +51,11 @@ defmodule AWSAuthTest do
   test "sign_query_parameters_request_with_multiple_headers" do
     headers = HashDict.new
     |> Dict.put("x-amz-acl", "public-read")
-    
+
     signed_request = AWSAuth.sign_url("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-      "PUT", 
-      "https://examplebucket.s3.amazonaws.com/test.txt", 
-      "us-east-1", 
+      "PUT",
+      "https://examplebucket.s3.amazonaws.com/test.txt",
+      "us-east-1",
       "s3",
       headers,
       Timex.Date.from({2013,05,24}, Timex.Date.timezone("GMT")))

@@ -2,18 +2,16 @@ defmodule AWSAuth.Utils do
 
   def build_canonical_request(http_method, url, params, headers, hashed_payload) do
 
-    query_params = Enum.map(params, fn({key, value}) -> "#{key}=#{value}"  end) 
-    |> Enum.sort(&(&1 < &2))  
+    query_params = Enum.map(params, fn({key, value}) -> "#{key}=#{value}"  end)
+    |> Enum.sort(&(&1 < &2))
     |> Enum.join("&")
 
-
-    header_params = Enum.map(headers, fn({key, value}) -> "#{String.downcase(key)}:#{String.strip(value)}"  end) 
-    |> Enum.sort(&(&1 < &2)) 
+    header_params = Enum.map(headers, fn({key, value}) -> "#{String.downcase(key)}:#{String.strip(value)}"  end)
+    |> Enum.sort(&(&1 < &2))
     |> Enum.join("\n")
 
-
-    signed_header_params = Enum.map(headers, fn({key, _}) -> String.downcase(key)  end) 
-    |> Enum.sort(&(&1 < &2)) 
+    signed_header_params = Enum.map(headers, fn({key, _}) -> String.downcase(key)  end)
+    |> Enum.sort(&(&1 < &2))
     |> Enum.join(";")
 
     if hashed_payload == :unsigned do
@@ -23,9 +21,9 @@ defmodule AWSAuth.Utils do
     "#{http_method}\n#{URI.encode(url) |> String.replace("$", "%24")}\n#{query_params}\n#{header_params}\n\n#{signed_header_params}\n#{hashed_payload}"
   end
 
-  def build_string_to_sign(canonical_request, timestamp, scope) do    
+  def build_string_to_sign(canonical_request, timestamp, scope) do
     hashed_canonical_request = hash_sha256(canonical_request)
-    
+
     "AWS4-HMAC-SHA256\n#{timestamp}\n#{scope}\n#{hashed_canonical_request}"
   end
 
@@ -42,7 +40,7 @@ defmodule AWSAuth.Utils do
   end
 
   def hash_sha256(data) do
-    :crypto.hash(:sha256, data) 
+    :crypto.hash(:sha256, data)
     |> bytes_to_string
   end
 
@@ -60,8 +58,8 @@ defmodule AWSAuth.Utils do
   end
 
   def bytes_to_string(bytes) do
-    :crypto.bytes_to_integer(bytes)
-    |> Integer.to_string(16)
+    bytes
+    |> Base.encode16
     |> String.downcase
   end
 
