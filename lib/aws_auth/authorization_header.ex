@@ -32,13 +32,16 @@ defmodule AWSAuth.AuthorizationHeader do
       headers = Dict.put(headers, "host", uri.host)
     end
 
-    hashed_payload =  AWSAuth.Utils.hash_sha256(payload)
+    hashed_payload = AWSAuth.Utils.hash_sha256(payload)
 
     if !Dict.has_key?(headers, "x-amz-content-sha256") do
-      headers = Dict.put(headers, "x-amz-content-sha256", hashed_payload)
+      headers = Dict.put(headers, "x-amz-content-sha256", case payload do
+          "" -> ""
+          _  -> hashed_payload
+        end)
     end
 
-    amz_date = DateFormat.format!(now, "{ISOz}") |> String.replace("-", "") |> String.replace(":", "")
+    amz_date = DateFormat.format!(now, "{ISOz}") |> String.replace("-", "") |> String.replace(":", "") |> String.replace(~r/\.\d*/, "")
     date = DateFormat.format!(now, "%Y%m%d", :strftime)
 
     scope = "#{date}/#{region}/#{service}/aws4_request"
@@ -47,6 +50,7 @@ defmodule AWSAuth.AuthorizationHeader do
     |>  AWSAuth.Utils.build_string_to_sign(amz_date, scope)
 
     signature =  AWSAuth.Utils.build_signing_key(secret_key, date, region, service)
+
     |>  AWSAuth.Utils.build_signature(string_to_sign)
 
     signed_headers = Enum.map(headers, fn({key, _}) -> String.downcase(key)  end)
