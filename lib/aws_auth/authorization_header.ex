@@ -50,7 +50,6 @@ defmodule AWSAuth.AuthorizationHeader do
     |>  AWSAuth.Utils.build_string_to_sign(amz_date, scope)
 
     signature =  AWSAuth.Utils.build_signing_key(secret_key, date, region, service)
-
     |>  AWSAuth.Utils.build_signature(string_to_sign)
 
     signed_headers = Enum.map(headers, fn({key, _}) -> String.downcase(key)  end)
