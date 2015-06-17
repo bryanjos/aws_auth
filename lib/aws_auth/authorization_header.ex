@@ -32,13 +32,16 @@ defmodule AWSAuth.AuthorizationHeader do
       headers = Dict.put(headers, "host", uri.host)
     end
 
-    hashed_payload =  AWSAuth.Utils.hash_sha256(payload)
+    hashed_payload = AWSAuth.Utils.hash_sha256(payload)
 
     if !Dict.has_key?(headers, "x-amz-content-sha256") do
-      headers = Dict.put(headers, "x-amz-content-sha256", hashed_payload)
+      headers = Dict.put(headers, "x-amz-content-sha256", case payload do
+          "" -> ""
+          _  -> hashed_payload
+        end)
     end
 
-    amz_date = DateFormat.format!(now, "{ISOz}") |> String.replace("-", "") |> String.replace(":", "")
+    amz_date = DateFormat.format!(now, "{ISOz}") |> String.replace("-", "") |> String.replace(":", "") |> String.replace(~r/\.\d*/, "")
     date = DateFormat.format!(now, "%Y%m%d", :strftime)
 
     scope = "#{date}/#{region}/#{service}/aws4_request"
