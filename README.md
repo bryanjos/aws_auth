@@ -26,7 +26,7 @@ Does both URL and Authorization Header signing.
 In most cases, you would probably call it like this (examples using the example access key and secret from AWS):
 
 ```elixir
-signed_request = AWSAuth.sign("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+signed_request = AWSAuth.sign_url("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
   "GET",
   "https://examplebucket.s3.amazonaws.com/test.txt",
   "us-east-1",
@@ -37,7 +37,7 @@ signed_request = AWSAuth.sign("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPx
 Or if you need to supply headers for signing, like this:
 
 ```elixir
-signed_request = AWSAuth.sign("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+signed_request = AWSAuth.sign_url("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
   "GET",
   "https://examplebucket.s3.amazonaws.com/test.txt",
   "us-east-1",
@@ -50,7 +50,7 @@ signed_request = AWSAuth.sign("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPx
 Using the example from AWS (http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html)
 
 ```elixir
-signed_request = AWSAuth.sign("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+signed_request = AWSAuth.sign_url("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
   "GET",
   "https://examplebucket.s3.amazonaws.com/test.txt",
   "us-east-1",
