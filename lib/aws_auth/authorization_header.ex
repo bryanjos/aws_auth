@@ -41,7 +41,7 @@ defmodule AWSAuth.AuthorizationHeader do
         end)
     end
 
-    amz_date = DateFormat.format!(now, "{ISOz}") |> String.replace("-", "") |> String.replace(":", "") |> String.replace(~r/\.\d*/, "")
+    amz_date = DateFormat.format!(now, "%Y%m%dT%H%M%SZ", :strftime)
     date = DateFormat.format!(now, "%Y%m%d", :strftime)
 
     scope = "#{date}/#{region}/#{service}/aws4_request"
