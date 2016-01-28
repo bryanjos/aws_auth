@@ -3,7 +3,7 @@ defmodule AWSAuth.Mixfile do
 
   def project do
     [app: :aws_auth,
-     version: "0.2.5-dev",
+     version: "0.2.5",
      elixir: "~> 1.0",
      description: description,
      package: package,
@@ -11,7 +11,7 @@ defmodule AWSAuth.Mixfile do
   end
 
   def application do
-    [applications: [:logger, :timex]]
+    [applications: [:logger, :timex, :tzdata]]
   end
 
   defp deps do
