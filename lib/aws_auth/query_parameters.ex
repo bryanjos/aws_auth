@@ -1,6 +1,4 @@
 defmodule AWSAuth.QueryParameters do
-  alias Timex.DateFormat
-
   #http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html
   def sign(access_key, secret_key, http_method, url, region, service, headers, request_time) do
     now = request_time
@@ -14,8 +12,8 @@ defmodule AWSAuth.QueryParameters do
       headers = Dict.put(headers, "host", uri.host)
     end
 
-    amz_date = DateFormat.format!(now, "%Y%m%dT%H%M%SZ", :strftime)
-    date = DateFormat.format!(now, "%Y%m%d", :strftime)
+    amz_date = Timex.format!(now, "%Y%m%dT%H%M%SZ", :strftime)
+    date = Timex.format!(now, "%Y%m%d", :strftime)
 
     scope = "#{date}/#{region}/#{service}/aws4_request"
 
