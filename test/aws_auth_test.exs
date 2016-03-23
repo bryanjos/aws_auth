@@ -1,7 +1,7 @@
 defmodule AWSAuthTest do
   use ExUnit.Case
 
-  @time Timex.from({2013,05,24})
+  @time Timex.date({2013,05,24})
 
   test "url signing" do
 
