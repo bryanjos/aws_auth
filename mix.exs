@@ -15,7 +15,7 @@ defmodule AWSAuth.Mixfile do
   end
 
   defp deps do
-    [{:timex, "~> 1.0"}]
+    [{:timex, "~> 2.0"}]
   end
 
   defp description do
