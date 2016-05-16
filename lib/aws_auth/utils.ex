@@ -58,9 +58,7 @@ defmodule AWSAuth.Utils do
   end
 
   def bytes_to_string(bytes) do
-    bytes
-    |> Base.encode16
-    |> String.downcase
+    Base.encode16(bytes, case: :lower)
   end
 
 end
