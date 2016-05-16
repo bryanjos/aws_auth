@@ -11,7 +11,7 @@ defmodule AWSAuth.Mixfile do
   end
 
   def application do
-    [applications: [:logger, :timex, :tzdata]]
+    [applications: [:logger, :timex]]
   end
 
   defp deps do
