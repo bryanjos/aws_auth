@@ -3,7 +3,7 @@ defmodule AWSAuth.Mixfile do
 
   def project do
     [app: :aws_auth,
-     version: "0.2.5",
+     version: "0.3.0",
      elixir: "~> 1.0",
      description: description,
      package: package,
@@ -27,7 +27,7 @@ defmodule AWSAuth.Mixfile do
   defp package do
     [
      files: ["lib", "priv", "mix.exs", "README*", "readme*", "LICENSE*", "license*"],
-     contributors: ["Bryan Joseph"],
+     maintainers: ["Bryan Joseph"],
      licenses: ["Apache 2.0"],
      links: %{"GitHub" => "https://github.com/bryanjos/aws_auth"}
     ]
