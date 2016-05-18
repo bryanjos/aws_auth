@@ -33,7 +33,9 @@ defmodule AWSAuth.QueryParameters do
     |> Dict.put("X-Amz-Expires", AWSAuth.Utils.uri_encode("86400"))
     |> Dict.put("X-Amz-SignedHeaders", AWSAuth.Utils.uri_encode("#{Dict.keys(headers) |> Enum.join(";")}"))
 
-    string_to_sign = AWSAuth.Utils.build_canonical_request(http_method, uri.path, params, headers, :unsigned)
+    hashed_payload = if service == "s3", do: :unsigned, else: AWSAuth.Utils.hash_sha256("")
+
+    string_to_sign = AWSAuth.Utils.build_canonical_request(http_method, uri.path, params, headers, hashed_payload)
     |> AWSAuth.Utils.build_string_to_sign(amz_date, scope)
 
     signature = AWSAuth.Utils.build_signing_key(secret_key, date, region, service)
