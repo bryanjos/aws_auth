@@ -30,7 +30,11 @@ defmodule AWSAuth do
   end
 
   def sign_url(access_key, secret_key, http_method, url, region, service, headers, request_time) do
-    AWSAuth.QueryParameters.sign(access_key, secret_key, http_method, url, region, service, headers, request_time)
+    sign_url(access_key, secret_key, http_method, url, region, service, headers, request_time, "")
+  end
+
+  def sign_url(access_key, secret_key, http_method, url, region, service, headers, request_time, payload) do
+    AWSAuth.QueryParameters.sign(access_key, secret_key, http_method, url, region, service, headers, request_time, payload)
   end
 
 

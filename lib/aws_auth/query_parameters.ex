@@ -1,6 +1,6 @@
 defmodule AWSAuth.QueryParameters do
   #http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html
-  def sign(access_key, secret_key, http_method, url, region, service, headers, request_time) do
+  def sign(access_key, secret_key, http_method, url, region, service, headers, request_time, payload) do
     now = request_time
     uri = URI.parse(url)
 
@@ -33,7 +33,7 @@ defmodule AWSAuth.QueryParameters do
     |> Dict.put("X-Amz-Expires", AWSAuth.Utils.uri_encode("86400"))
     |> Dict.put("X-Amz-SignedHeaders", AWSAuth.Utils.uri_encode("#{Dict.keys(headers) |> Enum.join(";")}"))
 
-    hashed_payload = if service == "s3", do: :unsigned, else: AWSAuth.Utils.hash_sha256("")
+    hashed_payload = if service == "s3", do: :unsigned, else: AWSAuth.Utils.hash_sha256(payload)
 
     string_to_sign = AWSAuth.Utils.build_canonical_request(http_method, uri.path, params, headers, hashed_payload)
     |> AWSAuth.Utils.build_string_to_sign(amz_date, scope)
