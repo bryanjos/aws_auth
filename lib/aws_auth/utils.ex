@@ -1,10 +1,9 @@
 defmodule AWSAuth.Utils do
+  @moduledoc false
 
   def build_canonical_request(http_method, url, params, headers, hashed_payload) do
 
-    query_params = Enum.map(params, fn({key, value}) -> "#{key}=#{value}"  end)
-    |> Enum.sort(&(&1 < &2))
-    |> Enum.join("&")
+    query_params = URI.encode_query(params)
 
     header_params = Enum.map(headers, fn({key, value}) -> "#{String.downcase(key)}:#{String.strip(value)}"  end)
     |> Enum.sort(&(&1 < &2))
@@ -23,7 +22,6 @@ defmodule AWSAuth.Utils do
 
   def build_string_to_sign(canonical_request, timestamp, scope) do
     hashed_canonical_request = hash_sha256(canonical_request)
-
     "AWS4-HMAC-SHA256\n#{timestamp}\n#{scope}\n#{hashed_canonical_request}"
   end
 
@@ -46,15 +44,6 @@ defmodule AWSAuth.Utils do
 
   def hmac_sha256(key, data) do
     :crypto.hmac(:sha256, key, data)
-  end
-
-  def uri_encode(data) do
-    URI.encode(data)
-    |> String.replace("/", "%2F")
-    |> String.replace("+", "%2B")
-    |> String.replace("=", "%3D")
-    |> String.replace("$", "%24")
-    |> String.replace(";", "%3B")
   end
 
   def bytes_to_string(bytes) do

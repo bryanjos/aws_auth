@@ -1,39 +1,30 @@
 defmodule AWSAuth.AuthorizationHeader do
+  @moduledoc false
+
   #http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-auth-using-authorization-header.html
   def sign(access_key, secret_key, http_method, url, region, service, payload, headers, request_time) do
     now = request_time
     uri = URI.parse(url)
 
     params = case uri.query do
-      nil ->
-        HashDict.new
-      _ ->
-        String.split(uri.query, "&")
-        |> Enum.map(fn(x) -> String.split(x, "=") end)
-        |> Enum.reduce(HashDict.new, fn(x, acc) ->
-            {key, value} = case length(x) do
-              1 ->
-                {hd(x), ""}
-              _ ->
-                {hd(x), List.last(x)}
-            end
-
-            Dict.put(acc, key,  AWSAuth.Utils.uri_encode(value))
-        end)
-    end
+               nil ->
+                 Map.new
+               _ ->
+                 URI.decode_query(uri.query)
+             end
 
     http_method = String.upcase(http_method)
     region = String.downcase(region)
     service = String.downcase(service)
 
-    if !Dict.has_key?(headers, "host") do
-      headers = Dict.put(headers, "host", uri.host)
+    if !Map.has_key?(headers, "host") do
+      headers = Map.put(headers, "host", uri.host)
     end
 
     hashed_payload = AWSAuth.Utils.hash_sha256(payload)
 
-    if !Dict.has_key?(headers, "x-amz-content-sha256") do
-      headers = Dict.put(headers, "x-amz-content-sha256", case payload do
+    if !Map.has_key?(headers, "x-amz-content-sha256") do
+      headers = Map.put(headers, "x-amz-content-sha256", case payload do
           "" -> ""
           _  -> hashed_payload
         end)
