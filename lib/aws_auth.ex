@@ -1,6 +1,10 @@
 defmodule AWSAuth do
   alias Timex.Date
 
+  @moduledoc """
+  Signs urls or authentication headers for use with AWS requests
+  """
+
   @doc """
   `AWSAuth.sign_url(access_key, secret_key, http_method, url, region, service, headers)`
 
@@ -16,13 +20,13 @@ defmodule AWSAuth do
 
   `service`: The AWS service you are trying to access (i.e. s3). Check the url above for names as well.
 
-  `headers` (optional. defaults to `HashDict.new`): The headers that will be used in the request. Used for signing the request.
+  `headers` (optional. defaults to `Map.new`): The headers that will be used in the request. Used for signing the request.
   For signing, host is the only one required unless using any other x-amx-* headers.
   If host is present here, it will override using the host in the url to attempt signing.
   If only the host is needed, then you don't have to supply it and the host from the url will be used.
    """
   def sign_url(access_key, secret_key, http_method, url, region, service) do
-    sign_url(access_key, secret_key, http_method, url, region, service, HashDict.new)
+    sign_url(access_key, secret_key, http_method, url, region, service, Map.new)
   end
 
   def sign_url(access_key, secret_key, http_method, url, region, service, headers) do
@@ -53,7 +57,7 @@ defmodule AWSAuth do
 
   `service`: The AWS service you are trying to access (i.e. s3). Check the url above for names as well.
 
-  `headers` (optional. defaults to `HashDict.new`): The headers that will be used in the request. Used for signing the request.
+  `headers` (optional. defaults to `Map.new`): The headers that will be used in the request. Used for signing the request.
   For signing, host is the only one required unless using any other x-amx-* headers.
   If host is present here, it will override using the host in the url to attempt signing.
   Same goes for the x-amz-content-sha256 headers
@@ -63,7 +67,7 @@ defmodule AWSAuth do
   `payload` (optional. defaults to `""`): The contents of the payload if there is one.
   """
   def sign_authorization_header(access_key, secret_key, http_method, url, region, service) do
-    sign_authorization_header(access_key, secret_key, http_method, url, region, service, HashDict.new)
+    sign_authorization_header(access_key, secret_key, http_method, url, region, service, Map.new)
   end
 
   def sign_authorization_header(access_key, secret_key, http_method, url, region, service, headers) do

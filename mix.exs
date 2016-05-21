@@ -3,11 +3,14 @@ defmodule AWSAuth.Mixfile do
 
   def project do
     [app: :aws_auth,
-     version: "0.3.0",
+     version: "0.4.0",
      elixir: "~> 1.0",
      description: description,
      package: package,
-     deps: deps]
+     deps: deps,
+     test_coverage: [tool: ExCoveralls],
+     preferred_cli_env: [coveralls: :test]
+    ]
   end
 
   def application do
@@ -15,7 +18,13 @@ defmodule AWSAuth.Mixfile do
   end
 
   defp deps do
-    [{:timex, "~> 2.0"}]
+    [
+      {:timex, "~> 2.0"},
+      {:earmark, "~> 0.2", only: :dev },
+      {:ex_doc, "~> 0.11", only: :dev },
+      {:excoveralls, "~> 0.4", only: :test},
+      {:credo, "~> 0.2.0", only: [:dev, :test]}
+    ]
   end
 
   defp description do

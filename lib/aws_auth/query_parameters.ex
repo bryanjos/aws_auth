@@ -1,4 +1,6 @@
 defmodule AWSAuth.QueryParameters do
+  @moduledoc false
+
   #http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html
   def sign(access_key, secret_key, http_method, url, region, service, headers, request_time, payload) do
     now = request_time
@@ -8,8 +10,8 @@ defmodule AWSAuth.QueryParameters do
     region = String.downcase(region)
     service = String.downcase(service)
 
-    if !Dict.has_key?(headers, "host") do
-      headers = Dict.put(headers, "host", uri.host)
+    if !Map.has_key?(headers, "host") do
+      headers = Map.put(headers, "host", uri.host)
     end
 
     amz_date = Timex.format!(now, "%Y%m%dT%H%M%SZ", :strftime)
@@ -18,20 +20,18 @@ defmodule AWSAuth.QueryParameters do
     scope = "#{date}/#{region}/#{service}/aws4_request"
 
     params = case uri.query do
-      nil ->
-        HashDict.new
-      _ ->
-        String.split(uri.query, "&")
-        |> Enum.map(fn(x) -> String.split(x, "=") end)
-        |> Enum.reduce(HashDict.new, fn(x, acc) -> Dict.put(acc, hd(x), hd(tl(x))) end)
-    end
+               nil ->
+                 Map.new
+               _ ->
+                 URI.decode_query(uri.query)
+             end
 
     params = params
-    |> Dict.put("X-Amz-Algorithm", "AWS4-HMAC-SHA256")
-    |> Dict.put("X-Amz-Credential", AWSAuth.Utils.uri_encode("#{access_key}/#{scope}"))
-    |> Dict.put("X-Amz-Date", AWSAuth.Utils.uri_encode(amz_date))
-    |> Dict.put("X-Amz-Expires", AWSAuth.Utils.uri_encode("86400"))
-    |> Dict.put("X-Amz-SignedHeaders", AWSAuth.Utils.uri_encode("#{Dict.keys(headers) |> Enum.join(";")}"))
+    |> Map.put("X-Amz-Algorithm", "AWS4-HMAC-SHA256")
+    |> Map.put("X-Amz-Credential", "#{access_key}/#{scope}")
+    |> Map.put("X-Amz-Date", amz_date)
+    |> Map.put("X-Amz-Expires", "86400")
+    |> Map.put("X-Amz-SignedHeaders", "#{Map.keys(headers) |> Enum.join(";")}")
 
     hashed_payload = if service == "s3", do: :unsigned, else: AWSAuth.Utils.hash_sha256(payload)
 
@@ -41,8 +41,8 @@ defmodule AWSAuth.QueryParameters do
     signature = AWSAuth.Utils.build_signing_key(secret_key, date, region, service)
     |> AWSAuth.Utils.build_signature(string_to_sign)
 
-    params = Dict.put(params, "X-Amz-Signature", signature)
-    query_string = Enum.map(params, fn({key, value}) -> "#{key}=#{value}"  end) |> Enum.sort(&(&1 < &2))  |> Enum.join("&")
+    params = Map.put(params, "X-Amz-Signature", signature)
+    query_string = URI.encode_query(params)
 
     "#{uri.scheme}://#{uri.authority}#{uri.path || "/"}?#{query_string}"
   end
