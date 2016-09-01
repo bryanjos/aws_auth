@@ -3,7 +3,7 @@ defmodule AWSAuth.Utils do
 
   def build_canonical_request(http_method, url, params, headers, hashed_payload) do
 
-    query_params = URI.encode_query(params)
+    query_params = URI.encode_query(params) |> String.replace("+", "%20")
 
     header_params = Enum.map(headers, fn({key, value}) -> "#{String.downcase(key)}:#{String.strip(value)}"  end)
     |> Enum.sort(&(&1 < &2))

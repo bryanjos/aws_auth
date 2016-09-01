@@ -41,8 +41,8 @@ defmodule AWSAuth.QueryParameters do
     signature = AWSAuth.Utils.build_signing_key(secret_key, date, region, service)
     |> AWSAuth.Utils.build_signature(string_to_sign)
 
-    params = Map.put(params, "X-Amz-Signature", signature)
-    query_string = URI.encode_query(params)
+    params = params |> Map.put("X-Amz-Signature", signature)
+    query_string = URI.encode_query(params) |> String.replace("+", "%20")
 
     "#{uri.scheme}://#{uri.authority}#{uri.path || "/"}?#{query_string}"
   end
