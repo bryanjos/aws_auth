@@ -17,25 +17,21 @@ defmodule AWSAuth.AuthorizationHeader do
     region = String.downcase(region)
     service = String.downcase(service)
 
-    if !Map.has_key?(headers, "host") do
-      headers = Map.put(headers, "host", uri.host)
+    headers = Map.put_new(headers, "host", uri.host)
+
+    payload = case payload do
+      "" -> ""
+      _ -> AWSAuth.Utils.hash_sha256(payload)
     end
 
-    hashed_payload = AWSAuth.Utils.hash_sha256(payload)
-
-    if !Map.has_key?(headers, "x-amz-content-sha256") do
-      headers = Map.put(headers, "x-amz-content-sha256", case payload do
-          "" -> ""
-          _  -> hashed_payload
-        end)
-    end
+    headers = Map.put_new(headers, "x-amz-content-sha256", payload)
 
     amz_date = Timex.format!(now, "%Y%m%dT%H%M%SZ", :strftime)
     date = Timex.format!(now, "%Y%m%d", :strftime)
 
     scope = "#{date}/#{region}/#{service}/aws4_request"
 
-    string_to_sign =  AWSAuth.Utils.build_canonical_request(http_method, uri.path || "/", params, headers, hashed_payload)
+    string_to_sign = AWSAuth.Utils.build_canonical_request(http_method, uri.path || "/", params, headers, payload)
     |>  AWSAuth.Utils.build_string_to_sign(amz_date, scope)
 
     signature =  AWSAuth.Utils.build_signing_key(secret_key, date, region, service)
