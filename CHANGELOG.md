@@ -1,3 +1,8 @@
+## [0.5.1]
+
+### Fixed
+- Use Timex.DateTime.now, rather than Timex.DateTime.today (thanks to [@radar](https://github.com/radar))
+
 ## [0.5.0]
 
 ### Fixed
