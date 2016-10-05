@@ -1,3 +1,16 @@
+## [0.5.1]
+
+### Fixed
+- Use Timex.DateTime.now, rather than Timex.DateTime.today (thanks to [@radar](https://github.com/radar))
+
+## [0.5.0]
+
+### Fixed
+- `x-amz-date` using Date instead of DateTime  (thanks to [@radar](https://github.com/radar))
+
+### Changed
+- Dependency updates (thanks to [@radar](https://github.com/radar))
+
 ## [0.4.0]
 
 ### Fixed
