@@ -1,19 +1,39 @@
 defmodule AWSAuthTest do
   use ExUnit.Case
 
-  @time Timex.date({2013,05,24})
+  @time %Timex.DateTime{
+    year: 2013,
+    month: 5,
+    day: 24,
+    hour: 1,
+    minute: 23,
+    second: 45
+  }
 
   test "url signing" do
-
     signed_request = AWSAuth.sign_url("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
       "GET",
       "https://examplebucket.s3.amazonaws.com/test.txt",
       "us-east-1",
       "s3",
       Map.new,
-      @time)
+      @time) |> URI.parse
 
-    assert signed_request == "https://examplebucket.s3.amazonaws.com/test.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20130524%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20130524T000000Z&X-Amz-Expires=86400&X-Amz-Signature=aeeed9bbccd4d02ee5c0109b86d86835f995330da4c265957d157751f604d404&X-Amz-SignedHeaders=host"
+    assert signed_request.host == "examplebucket.s3.amazonaws.com"
+    assert signed_request.scheme == "https"
+    assert signed_request.path == "/test.txt"
+
+    expected_query_parts = [
+      {"X-Amz-Algorithm", "AWS4-HMAC-SHA256"},
+      {"X-Amz-Credential", "AKIAIOSFODNN7EXAMPLE/20130524/us-east-1/s3/aws4_request"},
+      {"X-Amz-Date", "20130524T012345Z"},
+      {"X-Amz-Expires", "86400"},
+      {"X-Amz-Signature", "e78f6cd3458a7e2b49a5db198a304414581bc823a3d8160d6b1178bfd93c7026"},
+      {"X-Amz-SignedHeaders", "host"}
+    ]
+
+    query_parts = URI.query_decoder(signed_request.query) |> Enum.to_list
+    assert query_parts == expected_query_parts
   end
 
   test "sign_authorization_header PUT" do
@@ -31,7 +51,14 @@ defmodule AWSAuthTest do
       "Welcome to Amazon S3.",
       @time)
 
-    assert signed_request == "AWS4-HMAC-SHA256 Credential=AKIAIOSFODNN7EXAMPLE/20130524/us-east-1/s3/aws4_request,SignedHeaders=date;host;x-amz-content-sha256;x-amz-date;x-amz-storage-class,Signature=98ad721746da40c64f1a55b78f14c238d841ea1380cd77a1b5971af0ece108bd"
+    "AWS4-HMAC-SHA256 " <> request_parts = signed_request
+
+    request_parts = String.split(request_parts, ",") |> Enum.map(&(String.split(&1, "=")))
+    assert request_parts == [
+      ["Credential", "AKIAIOSFODNN7EXAMPLE/20130524/us-east-1/s3/aws4_request"],
+      ["SignedHeaders", "date;host;x-amz-content-sha256;x-amz-date;x-amz-storage-class"],
+      ["Signature", "cb26a806062d11d1ba2debc79cfebbe2bae32c39f039cbb4f7df09e9450c9caa"]
+    ]
   end
 
   test "sign_query_parameters_request_with_multiple_headers" do
@@ -44,8 +71,22 @@ defmodule AWSAuthTest do
       "us-east-1",
       "s3",
       headers,
-      @time)
+      @time) |> URI.parse
 
-    assert signed_request == "https://examplebucket.s3.amazonaws.com/test.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20130524%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20130524T000000Z&X-Amz-Expires=86400&X-Amz-Signature=0f5e83a5df8c5fc898824b8c2e0def42b6ef5f6af114e86f4f2282672ff83152&X-Amz-SignedHeaders=host%3Bx-amz-acl"
+    assert signed_request.host == "examplebucket.s3.amazonaws.com"
+    assert signed_request.scheme == "https"
+    assert signed_request.path == "/test.txt"
+
+    expected_query_parts = [
+      {"X-Amz-Algorithm", "AWS4-HMAC-SHA256"},
+      {"X-Amz-Credential", "AKIAIOSFODNN7EXAMPLE/20130524/us-east-1/s3/aws4_request"},
+      {"X-Amz-Date", "20130524T012345Z"},
+      {"X-Amz-Expires", "86400"},
+      {"X-Amz-Signature", "486cf3cae7cf411a757b859139da22000288900fa78c18377fd57f243bbc7d01"},
+      {"X-Amz-SignedHeaders", "host;x-amz-acl"}
+    ]
+
+    query_parts = URI.query_decoder(signed_request.query) |> Enum.to_list
+    assert query_parts == expected_query_parts
   end
 end

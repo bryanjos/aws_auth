@@ -13,9 +13,9 @@ defmodule AWSAuth.Utils do
     |> Enum.sort(&(&1 < &2))
     |> Enum.join(";")
 
-    if hashed_payload == :unsigned do
-      hashed_payload = "UNSIGNED-PAYLOAD"
-    end
+    hashed_payload = if hashed_payload == :unsigned,
+      do: "UNSIGNED-PAYLOAD",
+      else: hashed_payload
 
     "#{http_method}\n#{URI.encode(url) |> String.replace("$", "%24")}\n#{query_params}\n#{header_params}\n\n#{signed_header_params}\n#{hashed_payload}"
   end

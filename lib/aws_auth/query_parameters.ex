@@ -10,9 +10,7 @@ defmodule AWSAuth.QueryParameters do
     region = String.downcase(region)
     service = String.downcase(service)
 
-    if !Map.has_key?(headers, "host") do
-      headers = Map.put(headers, "host", uri.host)
-    end
+    headers = Map.put_new(headers, "host", uri.host)
 
     amz_date = Timex.format!(now, "%Y%m%dT%H%M%SZ", :strftime)
     date = Timex.format!(now, "%Y%m%d", :strftime)
