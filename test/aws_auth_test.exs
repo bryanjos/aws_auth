@@ -1,7 +1,14 @@
 defmodule AWSAuthTest do
   use ExUnit.Case
 
-  @time ~N[2013-05-24 01:23:45]
+  @time %Timex.DateTime{
+    year: 2013,
+    month: 5,
+    day: 24,
+    hour: 1,
+    minute: 23,
+    second: 45
+  }
 
   test "url signing" do
     signed_request = AWSAuth.sign_url("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
