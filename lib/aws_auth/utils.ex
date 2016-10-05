@@ -50,4 +50,18 @@ defmodule AWSAuth.Utils do
     Base.encode16(bytes, case: :lower)
   end
 
+  def format_time(time) do
+    formatted_time = time
+    |> NaiveDateTime.to_iso8601
+    |> String.replace("-", "")
+    |> String.replace(":", "")
+    formatted_time <> "Z"
+  end
+
+  def format_date(date) do
+    date
+    |> NaiveDateTime.to_date
+    |> Date.to_iso8601
+    |> String.replace("-", "")
+  end
 end

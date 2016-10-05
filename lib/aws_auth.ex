@@ -29,7 +29,7 @@ defmodule AWSAuth do
   end
 
   def sign_url(access_key, secret_key, http_method, url, region, service, headers) do
-    sign_url(access_key, secret_key, http_method, url, region, service, headers, Timex.DateTime.now)
+    sign_url(access_key, secret_key, http_method, url, region, service, headers, current_time)
   end
 
   def sign_url(access_key, secret_key, http_method, url, region, service, headers, request_time) do
@@ -74,11 +74,14 @@ defmodule AWSAuth do
   end
 
   def sign_authorization_header(access_key, secret_key, http_method, url, region, service, headers, payload) do
-    sign_authorization_header(access_key, secret_key, http_method, url, region, service, headers, payload, Timex.DateTime.now)
+    sign_authorization_header(access_key, secret_key, http_method, url, region, service, headers, payload, current_time)
   end
 
   def sign_authorization_header(access_key, secret_key, http_method, url, region, service, headers, payload, request_time) do
     AWSAuth.AuthorizationHeader.sign(access_key, secret_key, http_method, url, region, service, payload, headers, request_time)
   end
 
+  defp current_time do
+    DateTime.utc_now |> DateTime.to_naive
+  end
 end
