@@ -3,7 +3,7 @@ defmodule AWSAuth.Mixfile do
 
   def project do
     [app: :aws_auth,
-     version: "0.4.1",
+     version: "0.5.0",
      elixir: "~> 1.0",
      description: description,
      package: package,
