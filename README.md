@@ -56,7 +56,7 @@ signed_request = AWSAuth.sign_url("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG
   "us-east-1",
   "s3",
   Map.new,
-  Timex.Date.from({2013,05,24}, Timex.Date.timezone("GMT")))
+  ~N[2013-05-24 00:00:00])
 "https://examplebucket.s3.amazonaws.com/test.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20130524%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20130524T000000Z&X-Amz-Expires=86400&X-Amz-Signature=aeeed9bbccd4d02ee5c0109b86d86835f995330da4c265957d157751f604d404&X-Amz-SignedHeaders=host"
 ```
 
@@ -116,6 +116,6 @@ signed_request = AWSAuth.sign_authorization_header("AKIAIOSFODNN7EXAMPLE", "wJal
   "s3",
   headers,
   "Welcome to Amazon S3.",
-  Timex.Date.from({2013,05,24}, Timex.Date.timezone("GMT")))
+  ~N[2013-05-24 00:00:00])
 "AWS4-HMAC-SHA256 Credential=AKIAIOSFODNN7EXAMPLE/20130524/us-east-1/s3/aws4_request,SignedHeaders=date;host;x-amz-content-sha256;x-amz-date;x-amz-storage-class,Signature=98ad721746da40c64f1a55b78f14c238d841ea1380cd77a1b5971af0ece108bd"
 ```
