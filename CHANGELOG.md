@@ -1,3 +1,11 @@
+## [0.6.0]
+
+### Changed
+- Requires Elixir 1.3 or higher
+
+### Fixed
+- Removed timex dependency and using Elixir's built in datetime functions (thanks to [@radar](https://github.com/radar))
+
 ## [0.5.1]
 
 ### Fixed
