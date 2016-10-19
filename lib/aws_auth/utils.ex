@@ -53,6 +53,8 @@ defmodule AWSAuth.Utils do
   def format_time(time) do
     formatted_time = time
     |> NaiveDateTime.to_iso8601
+    |> String.split(".")
+    |> List.first
     |> String.replace("-", "")
     |> String.replace(":", "")
     formatted_time <> "Z"
