@@ -1,3 +1,8 @@
+## [0.6.1]
+
+### Fixed
+- Correctly handle NaiveDateTimes with ms precision (thanks to [@radar](https://github.com/radar))
+
 ## [0.6.0]
 
 ### Changed
