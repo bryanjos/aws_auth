@@ -5,9 +5,9 @@ defmodule AWSAuth.Mixfile do
     [app: :aws_auth,
      version: "0.6.1",
      elixir: "~> 1.3",
-     description: description,
-     package: package,
-     deps: deps,
+     description: description(),
+     package: package(),
+     deps: deps(),
      test_coverage: [tool: ExCoveralls],
      preferred_cli_env: [coveralls: :test]
     ]
