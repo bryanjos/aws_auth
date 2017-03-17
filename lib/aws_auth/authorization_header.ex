@@ -28,6 +28,8 @@ defmodule AWSAuth.AuthorizationHeader do
     amz_date = request_time |> AWSAuth.Utils.format_time
     date = request_time |> AWSAuth.Utils.format_date
 
+    headers = Map.put(headers, "x-amz-date", amz_date)
+
     scope = "#{date}/#{region}/#{service}/aws4_request"
 
     string_to_sign = AWSAuth.Utils.build_canonical_request(http_method, uri.path || "/", params, headers, payload)
@@ -40,6 +42,10 @@ defmodule AWSAuth.AuthorizationHeader do
     |> Enum.sort(&(&1 < &2))
     |> Enum.join(";")
 
-    "AWS4-HMAC-SHA256 Credential=#{access_key}/#{scope},SignedHeaders=#{signed_headers},Signature=#{signature}"
+    auth_header = "AWS4-HMAC-SHA256 Credential=#{access_key}/#{scope},SignedHeaders=#{signed_headers},Signature=#{signature}"
+
+    headers
+    |> Map.put("authorization", auth_header)
+    |> Map.to_list
   end
 end
