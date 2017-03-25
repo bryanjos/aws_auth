@@ -28,7 +28,7 @@ defmodule AWSAuth.AuthorizationHeader do
     amz_date = request_time |> AWSAuth.Utils.format_time
     date = request_time |> AWSAuth.Utils.format_date
 
-    headers = Map.put(headers, "x-amz-date", amz_date)
+    headers = Map.put_new(headers, "x-amz-date", amz_date)
 
     scope = "#{date}/#{region}/#{service}/aws4_request"
 

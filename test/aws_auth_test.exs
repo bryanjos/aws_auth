@@ -44,7 +44,7 @@ defmodule AWSAuthTest do
       "Welcome to Amazon S3.",
       @time)
 
-    "AWS4-HMAC-SHA256 " <> request_parts = signed_request
+    {"authorization", "AWS4-HMAC-SHA256 " <> request_parts} = signed_request |> List.keyfind("authorization", 0)
 
     request_parts = String.split(request_parts, ",") |> Enum.map(&(String.split(&1, "=")))
     assert request_parts == [
