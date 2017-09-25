@@ -5,7 +5,7 @@ defmodule AWSAuth.Utils do
 
     query_params = URI.encode_query(params) |> String.replace("+", "%20")
 
-    header_params = Enum.map(headers, fn({key, value}) -> "#{String.downcase(key)}:#{String.strip(value)}"  end)
+    header_params = Enum.map(headers, fn({key, value}) -> "#{String.downcase(key)}:#{String.trim(value)}"  end)
     |> Enum.sort(&(&1 < &2))
     |> Enum.join("\n")
 
