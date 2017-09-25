@@ -22,7 +22,7 @@ defmodule AWSAuth.Mixfile do
       {:earmark, "~> 0.2", only: :dev },
       {:ex_doc, "~> 0.11", only: :dev },
       {:excoveralls, "~> 0.4", only: :test},
-      {:credo, "~> 0.2.0", only: [:dev, :test]}
+      {:credo, "~> 0.8.6", only: [:dev, :test]}
     ]
   end
 

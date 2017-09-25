@@ -40,7 +40,6 @@ defmodule AWSAuth do
     AWSAuth.QueryParameters.sign(access_key, secret_key, http_method, url, region, service, headers, request_time, payload)
   end
 
-
   @doc """
   `AWSAuth.sign_authorization_header(access_key, secret_key, http_method, url, region, service, headers, payload)`
 
