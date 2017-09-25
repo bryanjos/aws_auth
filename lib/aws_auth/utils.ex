@@ -1,7 +1,7 @@
 defmodule AWSAuth.Utils do
   @moduledoc false
 
-  def build_canonical_request(http_method, url, params, headers, hashed_payload) do
+  def build_canonical_request(http_method, path, params, headers, hashed_payload) do
 
     query_params = URI.encode_query(params) |> String.replace("+", "%20")
 
@@ -17,7 +17,13 @@ defmodule AWSAuth.Utils do
       do: "UNSIGNED-PAYLOAD",
       else: hashed_payload
 
-    "#{http_method}\n#{URI.encode(url) |> String.replace("$", "%24")}\n#{query_params}\n#{header_params}\n\n#{signed_header_params}\n#{hashed_payload}"
+    encoded_path =
+      path
+      |> String.split("/")
+      |> Enum.map(fn (segment) -> URI.encode_www_form(segment) end)
+      |> Enum.join("/")
+
+    "#{http_method}\n#{encoded_path}\n#{query_params}\n#{header_params}\n\n#{signed_header_params}\n#{hashed_payload}"
   end
 
   def build_string_to_sign(canonical_request, timestamp, scope) do
