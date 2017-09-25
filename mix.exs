@@ -19,8 +19,8 @@ defmodule AWSAuth.Mixfile do
 
   defp deps do
     [
-      {:earmark, "~> 0.2", only: :dev },
-      {:ex_doc, "~> 0.11", only: :dev },
+      {:earmark, "~> 1.2.3", only: :dev },
+      {:ex_doc, "~> 0.16", only: :dev },
       {:excoveralls, "~> 0.4", only: :test},
       {:credo, "~> 0.8.6", only: [:dev, :test]}
     ]
