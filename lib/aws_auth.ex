@@ -23,7 +23,7 @@ defmodule AWSAuth do
   For signing, host is the only one required unless using any other x-amx-* headers.
   If host is present here, it will override using the host in the url to attempt signing.
   If only the host is needed, then you don't have to supply it and the host from the url will be used.
-   """
+  """
   def sign_url(access_key, secret_key, http_method, url, region, service) do
     sign_url(access_key, secret_key, http_method, url, region, service, Map.new)
   end
