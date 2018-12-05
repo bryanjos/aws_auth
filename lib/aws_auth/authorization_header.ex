@@ -18,7 +18,11 @@ defmodule AWSAuth.AuthorizationHeader do
 
     headers = Map.put_new(headers, "host", uri.host)
 
-    payload = AWSAuth.Utils.hash_sha256(payload)
+    payload = if payload == :hashed do
+      payload
+    else
+      AWSAuth.Utils.hash_sha256(payload)
+    end
 
     headers = Map.put_new(headers, "x-amz-content-sha256", payload)
 

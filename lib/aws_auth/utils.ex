@@ -13,9 +13,11 @@ defmodule AWSAuth.Utils do
     |> Enum.sort(&(&1 < &2))
     |> Enum.join(";")
 
-    hashed_payload = if hashed_payload == :unsigned,
-      do: "UNSIGNED-PAYLOAD",
-      else: hashed_payload
+    hashed_payload = case hashed_payload do
+      :unsigned -> "UNSIGNED-PAYLOAD"
+      :hashed -> headers["x-amz-content-sha256"]
+      _ -> hashed_payload
+    end
 
     encoded_path =
       path
