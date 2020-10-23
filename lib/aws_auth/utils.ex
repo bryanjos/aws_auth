@@ -22,6 +22,7 @@ defmodule AWSAuth.Utils do
       |> String.split("/")
       |> Enum.map(fn (segment) -> URI.encode_www_form(segment) end)
       |> Enum.join("/")
+      |> String.replace("+", "%20")
 
     "#{http_method}\n#{encoded_path}\n#{query_params}\n#{header_params}\n\n#{signed_header_params}\n#{hashed_payload}"
   end
