@@ -14,7 +14,6 @@ defmodule AWSAuth.AuthorizationHeader do
 
     http_method = String.upcase(http_method)
     region = String.downcase(region)
-    service = String.downcase(service)
 
     headers = Map.put_new(headers, "host", uri.host)
 
