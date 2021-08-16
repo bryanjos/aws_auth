@@ -49,7 +49,11 @@ defmodule AWSAuth.Utils do
   end
 
   def hmac_sha256(key, data) do
-    :crypto.hmac(:sha256, key, data)
+    if function_exported?(:crypto, :mac, 4) do
+      :crypto.mac(:hmac, :sha256, key, data)
+    else
+      :crypto.hmac(:sha256, key, data)
+    end
   end
 
   def bytes_to_string(bytes) do
