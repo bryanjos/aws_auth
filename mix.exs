@@ -14,7 +14,7 @@ defmodule AWSAuth.Mixfile do
   end
 
   def application do
-    [applications: [:logger]]
+    [applications: [:logger, :crypto]]
   end
 
   defp deps do
